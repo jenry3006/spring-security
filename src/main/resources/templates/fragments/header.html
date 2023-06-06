@@ -60,12 +60,12 @@
 					</div>
 				</form>
 
-				<form th:action="@{/logout}" 
+				<form th:action="@{/logout}" sec:authorize="isAuthenticated()"
 					  method="post"  class="form-inline mt-2 mt-md-0">
 					<div class="btn-group mb-2 mr-sm-2">
 						<button type="button" class="btn btn-light">
 							<i class="fas fa-user"></i> <span class=""
-								>Bob</span>
+								sec:authentication="name">Bob</span>
 						</button>
 						<button type="button"
 							class="btn btn-danger dropdown-toggle dropdown-toggle-split"
