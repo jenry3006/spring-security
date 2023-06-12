@@ -19,8 +19,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+                // acessos publicos liberados
                 .antMatchers("/webjars/**","/css/**","/image/**","/js/**").permitAll()
                 .antMatchers("/","/home").permitAll()
+                // acessos privados admin
+                .antMatchers("/u/**").hasAuthority("ADMIN")
+                // acessos privados medico
+                .antMatchers("/medicos/**").hasAuthority("MEDICO")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
