@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface EspecialidadeRepository extends JpaRepository<Especialidade, Long> {
+    //query para pesquisa dinamica no datatable
     @Query("select e from Especialidade e where e.titulo like :search%")
     Page<?> findAllByTitulo(String search, Pageable pageable);
 }
