@@ -30,7 +30,7 @@ public class UsuarioService implements UserDetailsService {
     private Datatables datatables;
 
     @Transactional(readOnly = true)
-    public Usuario buscarPorEmail(String email){
+    public Usuario buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
 
     }
@@ -47,16 +47,16 @@ public class UsuarioService implements UserDetailsService {
     }
 
     //Transformando lista de perfis para um array de string contendo apenas os perfis
-    private String[] getAuthorities(List<Perfil> perfis){
-        String [] authorities = new String[perfis.size()];
-        for (int i = 0; i < perfis.size(); i++ ){
+    private String[] getAuthorities(List<Perfil> perfis) {
+        String[] authorities = new String[perfis.size()];
+        for (int i = 0; i < perfis.size(); i++) {
             authorities[i] = perfis.get(i).getDesc();
         }
         return authorities;
     }
 
     @Transactional(readOnly = true)
-    public Map<String,Object> buscarTodos(HttpServletRequest request) {
+    public Map<String, Object> buscarTodos(HttpServletRequest request) {
         datatables.setRequest(request);
         datatables.setColunas(DatatablesColunas.USUARIOS);
         Page<Usuario> page = datatables.getSearch().isEmpty()
@@ -68,8 +68,14 @@ public class UsuarioService implements UserDetailsService {
     @Transactional(readOnly = false)
     public void salvarUsuario(Usuario usuario) {
         String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
-        usuario.setSenha(crypt );
+        usuario.setSenha(crypt);
         usuarioRepository.save(usuario);
 
     }
+
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id).get();
+    }
+
 }
