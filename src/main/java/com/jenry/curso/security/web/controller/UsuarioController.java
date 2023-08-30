@@ -1,6 +1,7 @@
 package com.jenry.curso.security.web.controller;
 
 import com.jenry.curso.security.domain.Perfil;
+import com.jenry.curso.security.domain.PerfilTipo;
 import com.jenry.curso.security.domain.Usuario;
 import com.jenry.curso.security.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +76,28 @@ public class UsuarioController {
         return new ModelAndView("usuario/cadastro", "usuario", service.buscarPorId(id));
     }
 
+    //carregar pagina para editar pelo id e editar
+    @GetMapping("/editar/dados/usuario/{id}/perfis/{perfis}")
+    public ModelAndView preEditarCadastroDadosPessoais(@PathVariable ("id") Long usuarioId,
+                                                       @PathVariable ("perfis") Long[] perfisId){
+        Usuario us = service.buscarPorIdEPerfis(usuarioId, perfisId);
+
+        if (us.getPerfis().contains(new Perfil(PerfilTipo.ADMIN.getCod())) &&
+            !us.getPerfis().contains(new Perfil(PerfilTipo.MEDICO.getCod())) ){
+
+            return new ModelAndView("usuario/cadastro", "usuario", us);
+        } else if (us.getPerfis().contains(new Perfil(PerfilTipo.MEDICO.getCod()))){
+
+            return new ModelAndView ("especialidade/especialidade");
+        } else if (us.getPerfis().contains(new Perfil(PerfilTipo.PACIENTE.getCod()))){
+
+            ModelAndView model = new ModelAndView("error");
+            model.addObject("status", 403);
+            model.addObject("error","Área restrita");
+            model.addObject("message","Os dados do paciente são restritos.");
+            return model;
+        }
+
+        return new ModelAndView("redirect:/u/lista");
+    }
 }

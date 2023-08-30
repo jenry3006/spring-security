@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query("select u from Usuario u where u.email like :email")
@@ -16,4 +18,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
               + "join u.perfis p "
               + "where u.email like :search% OR p.desc like :search%")
     Page<Usuario> findByEmailOrPerfil(String search, Pageable pageable);
+
+    @Query("select u from Usuario u "
+            + "join u.perfis p "
+            + "where u.id = :usuarioId AND p.id IN :perfisId")
+    Optional<Usuario> finByIdAndPerfis(Long usuarioId, Long[] perfisId);
 }
