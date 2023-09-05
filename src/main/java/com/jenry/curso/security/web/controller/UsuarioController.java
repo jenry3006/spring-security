@@ -1,8 +1,10 @@
 package com.jenry.curso.security.web.controller;
 
+import com.jenry.curso.security.domain.Medico;
 import com.jenry.curso.security.domain.Perfil;
 import com.jenry.curso.security.domain.PerfilTipo;
 import com.jenry.curso.security.domain.Usuario;
+import com.jenry.curso.security.service.MedicoService;
 import com.jenry.curso.security.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,6 +29,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService service;
+
+    @Autowired
+    private MedicoService medicoService;
 
     //Abrir cadastro de usuarios
     @GetMapping("/novo/cadastro/usuario")
@@ -88,7 +93,12 @@ public class UsuarioController {
             return new ModelAndView("usuario/cadastro", "usuario", us);
         } else if (us.getPerfis().contains(new Perfil(PerfilTipo.MEDICO.getCod()))){
 
-            return new ModelAndView ("especialidade/especialidade");
+            Medico medico = medicoService.buscarUsuarioPorId(usuarioId);
+
+            return medico.hasNotId()
+                    ? new ModelAndView("medico/cadastro", "medico", new Medico(new Usuario(usuarioId)))
+                    : new ModelAndView("medico/cadastro", "medico", medico);
+
         } else if (us.getPerfis().contains(new Perfil(PerfilTipo.PACIENTE.getCod()))){
 
             ModelAndView model = new ModelAndView("error");
