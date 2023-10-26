@@ -1,6 +1,7 @@
 package com.jenry.curso.security.config;
 
 import com.jenry.curso.security.domain.PerfilTipo;
+
 import com.jenry.curso.security.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

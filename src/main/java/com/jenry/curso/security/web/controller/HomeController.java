@@ -15,6 +15,7 @@ public class HomeController {
 		return "home";
 	}
 
+	// abrir pagina login
 	@GetMapping("/login")
 	public String login(){
 		return "login";
