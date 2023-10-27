@@ -36,4 +36,9 @@ public class MedicoService {
 
         repository.save(m2);
     }
+
+    @Transactional(readOnly = true)
+    public Medico buscarPorEmail(String email) {
+        return repository.findByUsuarioEmail(email).orElse(new Medico());
+    }
 }
