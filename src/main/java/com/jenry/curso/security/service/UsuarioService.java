@@ -84,4 +84,15 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.finByIdAndPerfis(usuarioId,perfisId)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não existe."));
     }
+
+    public static boolean isSenhaCorreta(String senhaEditada, String senhaArmazenada) {
+        //senha armazenada está criptografada. BCryptPE faz o trabalho de comparar a senha armazenada com a senha que vem da página
+        return new BCryptPasswordEncoder().matches(senhaEditada, senhaArmazenada);
+    }
+
+    @Transactional(readOnly = false)
+    public void alterarSenha(Usuario usuario, String senha) {
+        usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
+        usuarioRepository.save(usuario);
+    }
 }
