@@ -4,6 +4,7 @@ import com.jenry.curso.security.datatables.Datatables;
 import com.jenry.curso.security.datatables.DatatablesColunas;
 import com.jenry.curso.security.domain.Agendamento;
 import com.jenry.curso.security.domain.Horario;
+import com.jenry.curso.security.exception.AcessoNegadoException;
 import com.jenry.curso.security.repository.AgendamentoRepository;
 import com.jenry.curso.security.repository.projection.HistoricoPaciente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,13 +62,20 @@ public class AgendamentoService {
     }
 
     @Transactional(readOnly = false)
-    public void editar(Agendamento agendamento, String username) {
-        Agendamento ag = buscarPorId(agendamento.getId());
+    public void editar(Agendamento agendamento, String email) {
+        Agendamento ag = buscarPorIdEUsuario(agendamento.getId(),email);
         ag.setDataConsulta(agendamento.getDataConsulta());
         ag.setEspecialidade(agendamento.getEspecialidade());
         ag.setHorario(agendamento.getHorario());
         ag.setMedico(agendamento.getMedico());
 
 
+    }
+
+    @Transactional(readOnly = true)
+    public Agendamento buscarPorIdEUsuario(Long id, String email) {
+
+        return repository.findByIdAndPacienteOrMedicoEmail(id, email)
+                .orElseThrow(() -> new AcessoNegadoException("Acesso negado ao usuário: " + email));
     }
 }
