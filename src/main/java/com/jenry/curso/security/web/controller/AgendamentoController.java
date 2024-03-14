@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -76,6 +77,17 @@ public class AgendamentoController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    //localizar agendamento atraves do id e enviar para pagina cadastro
+    @GetMapping("/editar/consulta/{id}")
+    public String preEditarConsultaPaciente(@PathVariable("id") Long id,
+                                            ModelMap model, @AuthenticationPrincipal User user){
+        Agendamento agendamento = service.buscarPorId(id);
+
+        model.addAttribute("agendamento", agendamento);
+
+        return "agendamento/cadastro";
     }
 
 }

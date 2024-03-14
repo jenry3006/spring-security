@@ -53,4 +53,10 @@ public class AgendamentoService {
 
 
     }
+
+    @Transactional(readOnly = true)
+    public Agendamento buscarPorId(Long id) {
+
+        return repository.findById(id).get();
+    }
 }
