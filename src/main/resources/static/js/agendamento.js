@@ -71,6 +71,7 @@ $('#data').on('blur', function () {
     	    });
     	});
     }
+ });
     /**
      * Datatable histórico de consultas
     */
@@ -110,4 +111,4 @@ $('#data').on('blur', function () {
             ]
         });
     });
-});
+
